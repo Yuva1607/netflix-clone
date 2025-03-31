@@ -5,8 +5,10 @@ const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 
 async function fetchMovies() {
     try {
+        console.log("Fetching movies from:", API_URL);
         const response = await fetch(API_URL);
         const data = await response.json();
+        console.log("API Response:", data);
         displayMovies(data.results);
     } catch (error) {
         console.error("Error fetching movies:", error);
@@ -14,8 +16,14 @@ async function fetchMovies() {
 }
 
 function displayMovies(movies) {
+    console.log("Movies received:", movies);
     const moviesContainer = document.getElementById("movies");
     moviesContainer.innerHTML = "";
+
+    if (!movies || movies.length === 0) {
+        moviesContainer.innerHTML = "<p>No movies found.</p>";
+        return;
+    }
 
     movies.forEach(movie => {
         const movieElement = document.createElement("div");
