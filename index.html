@@ -4,17 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Netflix Clone</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        .movies-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .movie {
+            width: 200px;
+        }
+        .movie img {
+            width: 100%;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to My Netflix Clone</h1>
-    </header>
-    <main>
-        <div id="movies-container">
-            <!-- Movies will be loaded here dynamically -->
-        </div>
-    </main>
+    <h1>Welcome to My Netflix Clone</h1>
+    <div class="movies-container" id="movies"></div>
     <script src="script.js"></script>
 </body>
 </html>
