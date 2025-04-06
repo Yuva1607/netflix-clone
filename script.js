@@ -44,13 +44,19 @@ function displayMovies(movies) {
   });
 }
 
+// Event listeners
 searchInput.addEventListener("input", () => {
-  getMovies(searchInput.value, genreSelect.value);
+  const query = searchInput.value;
+  const genre = genreSelect.value;
+  getMovies(query, genre);
 });
 
 genreSelect.addEventListener("change", () => {
-  getMovies(searchInput.value, genreSelect.value);
+  const query = searchInput.value;
+  const genre = genreSelect.value;
+  getMovies(query, genre);
 });
 
+// Initial Load
 getGenres();
 getMovies();
