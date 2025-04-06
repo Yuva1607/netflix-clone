@@ -1,24 +1,31 @@
-const API_KEY = 'ccb73448281e7c34fd6b8eef24ede3c1';
-const API_URL = `https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}`;
-const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+const API_KEY = "ccb73448281e7c34fd6b8eef24ede3c1";
+const API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`;
 
-const moviesContainer = document.getElementById('movies');
+const container = document.getElementById("movie-container");
 
 fetch(API_URL)
-  .then(response => response.json())
-  .then(data => {
-    moviesContainer.innerHTML = ''; // clear loading text
-    data.results.forEach(movie => {
-      const movieEl = document.createElement('div');
-      movieEl.classList.add('movie');
-      movieEl.innerHTML = `
-        <img src="${IMG_URL + movie.poster_path}" alt="${movie.title}" />
-        <p>${movie.title}</p>
+  .then((res) => res.json())
+  .then((data) => {
+    data.results.forEach((movie) => {
+      const card = document.createElement("div");
+      card.className = "movie-card";
+      card.innerHTML = `
+        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
+        <div class="info">
+          <h3>${movie.title}</h3>
+        </div>
       `;
-      moviesContainer.appendChild(movieEl);
+      card.addEventListener("click", () => showModal(movie));
+      container.appendChild(card);
     });
-  })
-  .catch(err => {
-    moviesContainer.innerHTML = 'Failed to load movies 😢';
-    console.error(err);
   });
+
+function showModal(movie) {
+  document.getElementById("modal-title").textContent = movie.title;
+  document.getElementById("modal-overview").textContent = movie.overview;
+  document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
