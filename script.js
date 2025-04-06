@@ -1,68 +1,56 @@
-const apiKey = "ccb73448281e7c34fd6b8eef24ede3c1";
-const baseURL = "https://api.themoviedb.org/3";
-const imageURL = "https://image.tmdb.org/t/p/w500";
+const API_KEY = "ccb73448281e7c34fd6b8eef24ede3c1";
+const BASE_URL = "https://api.themoviedb.org/3";
+const IMAGE_PATH = "https://image.tmdb.org/t/p/w500";
+const movieContainer = document.getElementById("moviesContainer");
+const searchInput = document.getElementById("search");
+const genreSelect = document.getElementById("genreFilter");
 
-const searchInput = document.getElementById("searchInput");
-const genreSelect = document.getElementById("genreSelect");
-const moviesContainer = document.getElementById("moviesContainer");
-
-let allMovies = [];
-let genres = {};
-
-async function fetchGenres() {
-  const res = await fetch(`${baseURL}/genre/movie/list?api_key=${apiKey}`);
+async function getGenres() {
+  const res = await fetch(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}`);
   const data = await res.json();
-  genres = data.genres.reduce((acc, genre) => {
-    acc[genre.id] = genre.name;
-    return acc;
-  }, {});
-
-  for (let id in genres) {
+  data.genres.forEach((genre) => {
     const option = document.createElement("option");
-    option.value = id;
-    option.textContent = genres[id];
+    option.value = genre.id;
+    option.textContent = genre.name;
     genreSelect.appendChild(option);
-  }
+  });
 }
 
-async function fetchMovies() {
-  const res = await fetch(`${baseURL}/movie/popular?api_key=${apiKey}`);
+async function getMovies(query = "", genre = "") {
+  const url = query
+    ? `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}`
+    : `${BASE_URL}/discover/movie?api_key=${API_KEY}${genre ? `&with_genres=${genre}` : ""}`;
+
+  const res = await fetch(url);
   const data = await res.json();
-  allMovies = data.results;
-  displayMovies(allMovies);
+  displayMovies(data.results);
 }
 
 function displayMovies(movies) {
-  moviesContainer.innerHTML = "";
-  movies.forEach(movie => {
-    const movieDiv = document.createElement("div");
-    movieDiv.style.margin = "20px";
-    movieDiv.style.display = "inline-block";
-    movieDiv.style.width = "200px";
-    movieDiv.innerHTML = `
-      <img src="${imageURL + movie.poster_path}" style="width: 100%; border-radius: 8px;" />
-      <h3>${movie.title}</h3>
-      <p>${movie.overview.substring(0, 100)}...</p>
+  movieContainer.innerHTML = "";
+  movies.forEach((movie) => {
+    const movieEl = document.createElement("div");
+    movieEl.classList.add("movie");
+    movieEl.innerHTML = `
+      <img src="${IMAGE_PATH + movie.poster_path}" alt="${movie.title}" />
+      <h4>${movie.title}</h4>
+      <div class="synopsis"><strong>Overview:</strong> ${movie.overview || "No overview available."}</div>
     `;
-    moviesContainer.appendChild(movieDiv);
+    movieEl.addEventListener("click", () => {
+      const synopsis = movieEl.querySelector(".synopsis");
+      synopsis.style.display = synopsis.style.display === "block" ? "none" : "block";
+    });
+    movieContainer.appendChild(movieEl);
   });
 }
 
-function filterMovies() {
-  const searchTerm = searchInput.value.toLowerCase();
-  const selectedGenre = genreSelect.value;
-  
-  const filtered = allMovies.filter(movie => {
-    const matchesTitle = movie.title.toLowerCase().includes(searchTerm);
-    const matchesGenre = selectedGenre === "" || movie.genre_ids.includes(parseInt(selectedGenre));
-    return matchesTitle && matchesGenre;
-  });
+searchInput.addEventListener("input", () => {
+  getMovies(searchInput.value, genreSelect.value);
+});
 
-  displayMovies(filtered);
-}
+genreSelect.addEventListener("change", () => {
+  getMovies(searchInput.value, genreSelect.value);
+});
 
-searchInput.addEventListener("input", filterMovies);
-genreSelect.addEventListener("change", filterMovies);
-
-fetchGenres();
-fetchMovies();
+getGenres();
+getMovies();
