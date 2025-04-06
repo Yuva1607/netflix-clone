@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Netflix Clone</title>
   <style>
     body {
@@ -10,80 +10,58 @@
       background-color: #111;
       color: #fff;
       margin: 0;
-      padding: 20px;
-    }
-
-    h1 {
+      padding: 0;
       text-align: center;
     }
-
-    #movie-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
+    h1 {
+      padding: 20px;
     }
-
-    .movie-card {
+    input, select {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+    #moviesContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+    .movie {
+      margin: 15px;
+      width: 200px;
       background-color: #222;
       border-radius: 10px;
       overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-
-    .movie-card:hover {
-      transform: scale(1.05);
-    }
-
-    .movie-card img {
-      width: 100%;
-      display: block;
-    }
-
-    .movie-card .info {
-      padding: 10px;
-    }
-
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background-color: #222;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 500px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
       text-align: left;
     }
-
-    .close-btn {
-      float: right;
-      cursor: pointer;
-      font-size: 18px;
+    .movie img {
+      width: 100%;
+      border-bottom: 1px solid #444;
+    }
+    .movie h3 {
+      margin: 10px;
+      font-size: 16px;
+    }
+    .movie p {
+      margin: 0 10px 10px;
+      font-size: 13px;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
-  <h1>Welcome to My Netflix Clone</h1>
-  <div id="movie-container"></div>
+  <h1>🎬 Welcome to My Netflix Clone</h1>
 
-  <!-- Modal for Synopsis -->
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">&times;</span>
-      <h2 id="modal-title"></h2>
-      <p id="modal-overview"></p>
-    </div>
-  </div>
+  <input type="text" id="searchInput" placeholder="Search movies..." />
+  <select id="genreSelect">
+    <option value="">All Genres</option>
+  </select>
+
+  <div id="moviesContainer"></div>
 
   <script src="script.js"></script>
 </body>
